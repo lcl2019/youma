@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.airi.mapper.SalesLickMapper">
+	<insert id="addSalesLick" parameterType="com.airi.model.SalesLick">
+		insert into b_sales_lick
+		values(#{id},#{no},#{customerName},#{outline},#{contact},#{tel},#{lickOrigin},
+		#{lickDepict},#{successOdds},#{developer},#{devName},#{creatorName},#{assignTime},#{created},#{creator},
+		#{status},#{deleted});
+	</insert>
+	<update id="deleteSalesLick" parameterType="string" >
+	   update  b_sales_lick set deleted=true where no=#{no}
+	</update>
+	<update id="updateSalesLickById" parameterType="com.airi.model.SalesLick" >
+	  update b_sales_lick set  customer_name=#{customerName}, lick_origin=#{lickOrigin},
+	  success_odds=#{successOdds},outline=#{outline},contact=#{contact},tel=#{tel},
+	  lick_depict=#{lickDepict},creator=#{creator},created=#{created} where no=#{no}
+	</update>
+	 <update id="updateSalesLickStatus" parameterType="com.airi.model.SalesLick">
+          update b_sales_lick set status=#{status} where id=#{id}
+    </update>  
+	<select id="findSalesLickById" parameterType="long" resultType="com.airi.model.SalesLick">
+	  select id,no,customer_name "customerName",outline,contact,tel,lick_origin "lickOrigin",lick_depict "lickDepict",success_odds "successOdds",
+	  developer,dev_name "devName",creator_name "creatorName",assign_time "assignTime",created,creator,status,deleted from b_sales_lick where id=#{id}
+	</select>
+	<select id="findSalesLickList"  parameterType="java.util.Map" resultType="com.airi.model.SalesLick">
+	  select id,no,customer_name "customerName",outline,contact,tel,lick_origin "lickOrigin",lick_depict "lickDepict",success_odds "successOdds",
+	  developer,assign_time "assignTime",created,creator,status,deleted from b_sales_lick where deleted=false
+	  <if test="customerName!=null and customerName!='' ">
+	    and customer_name like '%${customerName}%'
+	  </if>
+	  <if test="outline!=null and outline!='' ">
+	    and outline like '%${outline}%'
+	  </if>
+	  <if test="contact!=null and contact!='' ">
+	    and contact like '%${contact}%'
+	  </if>
+	  order by created desc 
+	  limit ${index},${pageSize}
+	</select>
+	
+	<select id="findLickCount" parameterType="java.util.Map" resultType="int">
+	 select count(id) from b_sales_lick where deleted=false
+	  <if test="customerName!=null and customerName!='' ">
+	    and customer_name='%${customerName}%'
+	  </if>
+	  <if test="outline!=null and outline!='' ">
+	    and outline='%${outline}%'
+	  </if>
+	  <if test="contact!=null and contact!='' ">
+	    and contact='%${contact}%'
+	  </if>
+	
+	</select>
+	
+	
+
+</mapper>

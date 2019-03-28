@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.airi.mapper.SalesPlanMapper">
+
+	<insert id="addSalesPlan" parameterType="com.airi.model.SalesPlan">
+		insert into b_sales_plan values(id,#{lickId},#{planDate},#{todo},
+		#{result},#{created},#{creator},#{status},#{deleted})
+	</insert>
+
+	<update id="updateSalesPlan" parameterType="com.airi.model.SalesPlan">
+		update b_sales_plan set result=#{result} where id=#{id}
+	</update>
+   
+	<select id="findLickAndPlans" parameterType="long" resultMap="lick_plan_map">
+		select sl.*,sp.id sp_id,sp.lick_Id,sp.plan_date,sp.todo,sp.result,sp.created sp_created,
+		sp.status sp_status,sp.deleted sp_deleted from b_sales_lick sl inner join b_sales_plan sp on
+		sl.id=sp.lick_id where sl.id=#{id}
+	</select>
+	<resultMap type="com.airi.model.SalesLick" id="lick_plan_map">
+		<id property="id" column="id" />
+		<result property="no" column="no" />
+		<result property="customerName" column="customer_name" />
+		<result property="outline" column="outline" />
+		<result property="contact" column="contact" />
+		<result property="tel" column="tel" />
+		<result property="lickOrigin" column="lick_origin" />
+		<result property="lickDepict" column="lick_depict" />
+		<result property="successOdds" column="success_odds" />
+		<result property="developer" column="developer" />
+		<result property="devName" column="dev_name" />
+		<result property="creatorName" column="creator_name" />
+		<result property="assignTime" column="assign_time" />
+		<result property="created" column="created" />
+		<result property="creator" column="creator" />
+		<result property="status" column="status" />
+		<result property="deleted" column="deleted" />
+		<collection property="plans" ofType="com.airi.model.SalesPlan">
+		<!-- <association property=""></association> -->
+			<id property="id" column="sp_id" />
+			<result property="lickId" column="lick_Id" />
+			<result property="planDate" column="plan_date" />
+			<result property="todo" column="todo" />
+			<result property="result" column="result" />
+			<result property="created" column="created" />
+			<result property="creator" column="creator" />
+			<result property="status" column="sp_status" />
+			<result property="deleted" column="deleted" />
+		</collection>
+	</resultMap>
+</mapper>

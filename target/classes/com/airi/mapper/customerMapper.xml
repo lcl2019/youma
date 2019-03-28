@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.airi.mapper.CustomerMapper">
+    <insert id="addCustomer" parameterType="com.airi.model.Customer">
+    insert into b_customer values(id,#{no},#{name},#{region},#{managerId},#{managerName},#{level},
+    #{levelLabel},#{satisfy},#{credit},#{address},#{zip},#{tel},#{fax},#{website},#{licenceNo},
+    #{chieftain},#{registeredCapital},#{annualTurnover},#{bank},#{bankAccount},#{localTaxNo},#{nationalTaxNo},
+    #{created},#{creator},#{status},#{deleted});
+    </insert>
+    <update id="updateCustomer" parameterType="com.airi.model.Customer">
+       update b_customer set name=#{name},region=#{region},manager_id=#{managerId},manager_name=#{managerName},
+       level=#{level},level_label=#{levelLabel},satisfy=#{satisfy},credit=#{credit},address=#{address},
+       zip=#{zip},tel=#{tel},fax=#{fax},website=#{website},licence_no=#{licenceNo},
+       chieftain=#{chieftain},registered_capital=#{registeredCapital},annual_turnover=#{annualTurnover},
+       bank=#{bank},bank_account=#{bankAccount},local_tax_no=#{localTaxNo},national_tax_no=#{nationalTaxNo}
+       where id=#{id}
+    </update>
+    <select id="findCustomer" parameterType="long" resultType="com.airi.model.Customer">select * from b_customer where no=#{no}</select>
+	 <select id="findCustomerById" parameterType="long" resultType="com.airi.model.Customer">select * from b_customer where id=#{id}</select>
+	<select id="findCustomerList" parameterType="java.util.Map" resultMap="customer_list_map">
+		select * from b_customer where deleted=false
+		<if test="no!=null and no!='' ">
+		  and no like '%${no}%'
+		</if>
+		<if test="name!=null and name!='' ">
+		  and name like '%${name}%'
+		</if>
+		<if test="region!=null and region!='' ">
+		  and region=%#{region}
+		</if>
+		<if test="managerName!=null and managerName!='' ">
+		  and manager_name like '%${managerName}%'
+		</if>
+		<if test="level!=null and level!='' ">
+		  and level=#{level}
+		</if>
+		order by created desc 
+		limit ${index},${pageSize}
+
+	</select>
+
+	<resultMap type="com.airi.model.Customer" id="customer_list_map">
+		<id property="id" column="id" />
+		<result property="no" column="no" />
+		<result property="name" column="name" />
+		<result property="region" column="region" />
+		<result property="managerId" column="manager_id" />
+		<result property="managerName" column="manager_name" />
+		<result property="level" column="level" />
+		<result property="levelLabel" column="level_label" />
+		<result property="satisfy" column="satisfy" />
+		<result property="credit" column="creadit" />
+		<result property="address" column="address" />
+		<result property="zip" column="zip" />
+		<result property="tel" column="tel" />
+		<result property="fax" column="fax" />
+		<result property="website" column="website" />
+		<result property="licenceNo" column="licence_no" />
+		<result property="chieftain" column="chieftain" />
+		<result property="bankroll" column="bankroll" />
+		<result property="turnover" column="turnover" />
+		<result property="bank" column="bank" />
+		<result property="bankAccount" column="bank_account" />
+		<result property="localTaxNo" column="local_tax_no" />
+		<result property="nationalTaxNo" column="national_tax_no" />
+		<result property="crated" column="crated" />
+		<result property="crator" column="crator" />
+		<result property="status" column="status" />
+		<result property="deleted" column="deleted" />
+
+	</resultMap>
+	<select id="findCustomerCount" resultType="int">
+	select count(1) from b_customer where deleted=false
+		<if test="no!=null and no!='' ">
+		  and no like '%${no}%'
+		</if>
+		<if test="name!=null and name!='' ">
+		  and name like '%${name}%'
+		</if>
+		<if test="region!=null and region!='' ">
+		  and region=%#{region}
+		</if>
+		<if test="managerName!=null and managerName!='' ">
+		  and manager_name like '%${managerName}%'
+		</if>
+		<if test="level!=null and level!='' ">
+		  and level=#{level}
+		</if>
+
+	</select>
+</mapper>

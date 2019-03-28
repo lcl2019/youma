@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 加载配置文件 -->
+	<bean
+		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="locations">
+			<array>
+				<value>classpath:db.properties</value>
+			</array>
+		</property>
+
+	</bean>
+	<!-- 数据源配置 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${driver}"></property>
+		<property name="url" value="${url}"></property>
+		<property name="username" value="${username}"></property>
+		<property name="password" value="${password}"></property>
+		<property name="maxActive" value="${maxActive}"> </property>
+		<property name="maxIdle" value="${maxIdle}"></property>
+	</bean>
+	<!-- 加载myBatis配置  创建sqlsessionFactroy -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	 <property name="dataSource"  ref="dataSource"></property>
+	  <property name="mapperLocations" value="classpath:com/airi/mapper/*.xml"></property>
+	  
+	</bean>
+	<!-- 加载映射扫描器配置sqlSessionFactroy————动态代理方式进行数据库操作 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	  <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	  <property name="basePackage" value="com.airi.mapper"></property>
+	</bean>
+	
+</beans>

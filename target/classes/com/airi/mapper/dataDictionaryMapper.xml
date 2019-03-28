@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.airi.mapper.DataDictionaryMapper">
+	<insert id="addDataDict">
+		insert into b_data_dict
+		values(id,#{type},#{item},#{value},#{created},#{creator},
+		#{status},#{deleted});
+	</insert>
+	<select id="findDataDictList" parameterType="java.util.HashMap">
+		select * form b_data_dict where deleted=true
+		<if test="type!=null and type!='' ">
+		and type like '%${type}%'
+		</if>
+		<if test="item!=null and item!='' ">
+		and item like '%${item}%'
+		</if>
+		<if test="value!=null and value!='' ">
+		and value like '%${value}%'
+		</if>
+		order by created desc 
+		limit ${index},${pageSize}
+	</select>
+    <select id="findDataDictionaryCount" parameterType="java.util.HashMap">
+       select count(id) form b_data_dict where deleted=true
+		<if test="type!=null and type!='' ">
+		and type like '%${type}%'
+		</if>
+		<if test="item!=null and item!='' ">
+		and item like '%${item}%'
+		</if>
+		<if test="value!=null and value!='' ">
+		and value like '%${value}%'
+		</if>
+    
+    </select>
+	<select id="findDataDict" parameterType="Long">
+		select * from b_data_dict where id=#{id}
+	</select>
+
+	<update id="updateDataDict" parameterType="com.airi.model.DataDictionary">
+		update b_data_dict set type=#{type},item=#{item},value=#{value} where
+		id=#{id}
+	</update>
+
+</mapper>
